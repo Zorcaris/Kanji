@@ -5,7 +5,7 @@ from fpdf.enums import XPos, YPos
 from kanji_lists import JLPT,KYOIKU
 from pathlib import Path
 
-print (KYOIKU.HEISEI4.GRADE1)
+#print (KYOIKU.HEISEI4.GRADE1)
 
 # Get Json data
 with open('kanjiData.json','r',encoding='utf-8') as kanjiFile:
