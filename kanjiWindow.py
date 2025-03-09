@@ -12,7 +12,7 @@ kanji.state('normal')
 colonnes = ["Kanji", "Kun'yomi", "On'yomi", "Traduction","Number"]
 
 
-levels = ["N1","N2","N3","N4","N5"]
+levels = ["N1","N2","N3","N4","N5","Radical"]
 
 levels_vars = {level: tk.IntVar() for level in levels}
 
@@ -27,11 +27,15 @@ def keep_numbers_with_comprehension(input_string):
 # Function to show selected levels
 def create_PDF():
     selected_levels = [level for level in levels if levels_vars[level].get() == 1]
-    number =""
-    for i in selected_levels:
-        number += i
-    number=keep_numbers_with_comprehension(number)
-   # print("To send:",number)
+    
+    # Extract digits from selected levels
+    number = "".join(keep_numbers_with_comprehension(level) for level in selected_levels)
+
+    # If no valid number is found, default to "6"
+    if not number:
+        number = "6"
+
+    #print("To send:",number)
     Kanji.niveauSelect(number)
     # Allow to change levels without restarting everything
     kanji.quit()

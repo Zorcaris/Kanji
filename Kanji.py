@@ -2,10 +2,10 @@ import json
 import os
 from fpdf import FPDF
 from fpdf.enums import XPos, YPos
-from kanji_lists import JLPT
+from kanji_lists import JLPT,KYOIKU
 from pathlib import Path
 
-#print (JLPT.TANOS.N1)
+print (KYOIKU.HEISEI4.GRADE1)
 
 # Get Json data
 with open('kanjiData.json','r',encoding='utf-8') as kanjiFile:
@@ -56,17 +56,27 @@ pdf.add_font('noto', '', 'static\\NotoSansJP-Regular.ttf')
 
 nbNiveau = ""
 
-
 def niveauSelect(nbNiveau):
+   #print("nbNiveau",int(nbNiveau))
+    nbNiveauToInt = int(nbNiveau)
 
-    for k in range(6,0,-1) :
-        if nbNiveau.find(str(k))!=-1:
+    if nbNiveauToInt == 6:
+        #print("to header")
+        header(6)
+        pdf.set_font('noto', '', 15)
+        print("Radical")
+        tableau(dictionary["Radical"])
+        pdf.ln()
+
+    for k in range(5,0,-1) :
+        if nbNiveau.find(str(k))!=-1 and k<6:
             header(k)
             pdf.set_font('noto', '', 15)
             #print("N"+str(k))
             tableau(dictionary["N"+str(k)])
             pdf.ln()
-    
+
+
 
     # Folder where file will be saved
     desktop_path = Path(os.path.join(os.path.expanduser("~"), "Desktop"))
@@ -88,7 +98,11 @@ def niveauSelect(nbNiveau):
 def header(x):
     pdf.add_page()
     pdf.set_font("Helvetica", 'B', 19)
-    pdf.cell(200, 20, text="Kanji Table N"+str(x), new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
+   #print("header",x)
+    if x <= 5:
+        pdf.cell(200, 20, text="Kanji Table N"+str(x), new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
+    elif x == 6:
+        pdf.cell(200, 20, text="Kanji Table Radical", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
     headers = ["Kanji", "Kun'Yomi", "On'Yomi", "Traduction", "NB"]
     pdf.cell(20, 12, headers[0], 1, new_x=XPos.RIGHT, new_y=YPos.TOP, align='C')
     pdf.cell(48, 12, headers[1], 1, new_x=XPos.RIGHT, new_y=YPos.TOP, align='C')
